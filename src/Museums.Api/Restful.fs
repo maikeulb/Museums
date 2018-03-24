@@ -1,5 +1,4 @@
 namespace Museums.Api.Rest
-
 open Newtonsoft.Json
 open Newtonsoft.Json.Serialization
 open Suave
@@ -12,7 +11,6 @@ open Suave.Successful
 module RestFul =
     open Suave.RequestErrors
     open Suave.Filters
-
 
     // 'a -> WebPart
     let JSON v =
@@ -43,6 +41,7 @@ module RestFul =
     let rest resourceName resource =
 
         let resourcePath = "/" + resourceName
+
         let resourceIdPath = new PrintfFormat<(int -> string),unit,string,string,int>(resourcePath + "/%d")
 
         let badRequest = BAD_REQUEST "Resource not found"
@@ -52,6 +51,7 @@ module RestFul =
             | _ -> requestError
 
         let getAll= warbler (fun _ -> resource.GetAll () |> JSON)
+
         let getResourceById =
             resource.GetById >> handleResource (NOT_FOUND "Resource not found")
             let updateResourceById id =
@@ -69,9 +69,9 @@ module RestFul =
                 GET >=> getAll
                 POST >=> request (getResourceFromReq >> resource.Create >> JSON)
                 PUT >=> request (getResourceFromReq >> resource.Update >> handleResource badRequest)
-]
+            ]
             DELETE >=> pathScan resourceIdPath deleteResourceById
             GET >=> pathScan resourceIdPath getResourceById
             PUT >=> pathScan resourceIdPath updateResourceById
             HEAD >=> pathScan resourceIdPath isResourceExists
-            ]
+        ]

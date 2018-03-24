@@ -1,5 +1,4 @@
 namespace Museums.Api.Db
-
 open FSharp.Data.Sql
 
 module MuseumsDb =
@@ -59,7 +58,6 @@ module MuseumsDb =
     let updateMuseum museum =
         updateMuseumById museum.Id museum
 
-
     let deleteMuseum id =
         let ctx = getContext()
         let museumEntity = getMuseumEntityById ctx id
@@ -75,4 +73,3 @@ module MuseumsDb =
         match museumEntity with
         | None -> false
         | Some _ -> true
-
