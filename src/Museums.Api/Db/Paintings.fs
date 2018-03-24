@@ -1,82 +1,41 @@
 namespace Museums.Api.Db
-open FSharp.Data.Sql
+open System.Collections.Generic
 
 
-module Paintings =
-    type Paintings =
-        {
-            Id : int
-            Title : string
-            Artist : string
-            Medium : string
-        }
+type Paintings = {
+    Id : int
+    Name : string
+}
 
-    type private Sql = SqlDataProvider< "Server=localhost;Database=SuaveMusicStore;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=SSPI;", DatabaseVendor=Common.DatabaseProviderTypes.MSSQLSERVER >
+module PaintingsDb =
 
-    type DbContext = Sql.dataContext
-
-    type PaintingEntity = DbContext.``[dbo].[Paintings]Entity``
-
-    let private getContext() = Sql.GetDataContext()
-
-    let firstOrNone s = s |> Seq.tryFind (fun _ -> true)
-
-    let mapToPainting (paintingEntity : PaintingEntity) =
-        {
-            Id = paintingEntity.Id
-            Title = paintingEntity.Name
-            Artist = paintingEntity.Name
-            Medium = paintingEntity.Name
-        }
-
-        let getPaintings () =
-            getContext().``[dbo].[Paintings]``
-        |> Seq.map mapToPainting
-
-    let getPaintingEntityById (ctx : DbContext) id =
-        query {
-            for painting in ctx.``[dbo].[Paintings]`` do
-                where (painting.Id = id)
-                select painting
-        } |> firstOrNone
-
-    let getPaintingById id =
-        getPaintingEntityById (getContext()) id |> Option.map mapToPainting
-
+    let paintingsStorage = new Dictionary<int, Painting>()
+    let getPaintings () =
+        paintingsStorage.Values :> seq<Painting>
+    let getPainting id =
+        if paintingsStorage.ContainsKey(id) then
+            Some paintingsStorage.[id]
+        else
+            None
     let createPainting painting =
-        let ctx = getContext()
-        let painting = ctx.``[dbo].[Paintings]``.Create(painting.Id, painting.Name)
-        ctx.SubmitUpdates()
-        painting |> mapToPainting
+        let id = paintingsStorage.Values.Count + 1
+        let newPainting = {painting with Id = id}
+        paintingsStorage.Add(id, newPainting)
+        newPainting
 
-    let updatePaintingById id painting =
-        let ctx = getContext()
-        let paintingEntity = getPaintingEntityById ctx painting.Id
-        match paintingEntity with
-        | None -> None
-        | Some a ->
-            a.Id <- painting.Id
-            a.Title <- painting.Title
-            a.Artist <- painting.Artist
-            a.Medium <- painting.Medium
-            ctx.SubmitUpdates()
-            Some painting
+    let updatePaintingById paintingId paintingToBeUpdated =
+        if paintingsStorage.ContainsKey(paintingId) then
+            let updatedPainting = {paintingToBeUpdated with Id = paintingId}
+            paintingsStorage.[paintingId] <- updatedPainting
+            Some updatedPainting
+        else
+            None
 
-    let updatePainting painting =
-        updatePaintingById painting.Id painting
+    let updatePainting paintingToBeUpdated =
+        updatePaintingById paintingToBeUpdated.Id paintingToBeUpdated
 
-    let deletePainting id =
-        let ctx = getContext()
-        let paintingEntity = getPaintingEntityById ctx id
-        match paintingEntity with
-        | None -> ()
-        | Some a ->
-            a.Delete()
-            ctx.SubmitUpdates()
+    let deletePainting paintingId =
+        paintingsStorage.Remove(paintingId) |> ignore
 
-            let isPaintingExists id =
-                let ctx = getContext()
-                let paintingEntity = getPaintingEntityById ctx id
-        match paintingEntity with
-        | None -> false
-        | Some _ -> true
+    let isPaintingExists = paintingsStorage.ContainsKey
+
