@@ -11,7 +11,7 @@ xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
                 <ProjectGuid>
                 426ffd79-a5da-415b-b18f-354fabd289ae</ProjectGuid>
                 <OutputType>Exe</OutputType>
-                <RootNamespace>MuseumsApi</RootNamespace>
+                <RootNamespace>Museums.Api</RootNamespace>
                 <AssemblyName>Museums.Api</AssemblyName>
                 <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
                 <AutoGenerateBindingRedirects>
@@ -51,7 +51,11 @@ xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
                 <Reference Include="System.Numerics" />
         </ItemGroup>
         <ItemGroup>
-                <Compile Include="Museums.Api.fs" />
+                <Compile Include="Db/Museums.fs" />
+                <Compile Include="Db/Paintings.fs" />
+                <Compile Include="Handlers/Museum.fs" />
+                <Compile Include="Handlers/Paintings.fs" />
+                <Compile Include="Api.fs" />
         </ItemGroup>
         <PropertyGroup>
                 <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">
