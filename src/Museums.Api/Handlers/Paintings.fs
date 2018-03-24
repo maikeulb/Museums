@@ -8,7 +8,7 @@ open Suave.Successful
 
 
 [<AutoOpen>]
-module Museums =
+module Paintings =
     open Suave.RequestErrors
     open Suave.Filters
 
@@ -40,7 +40,7 @@ module Museums =
 
     let rest resourceName resource =
 
-        let resourcePath = "/" + resourceName
+        let resourcePath = "/Museums" + resourceName
 
         let resourceIdPath = new PrintfFormat<(int -> string),unit,string,string,int>(resourcePath + "/%d")
 
