@@ -1,14 +1,15 @@
 namespace Museums.Api.Db
 open FSharp.Data.Sql
 
-module MuseumsDb =
+
+module Museums =
     type Museums =
         {
             Id : int
-          Name : string
+            Name : string
         }
 
-        type private Sql = SqlDataProvider< "Server=localhost;Database=SuaveMusicStore;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=SSPI;", DatabaseVendor=Common.DatabaseProviderTypes.MSSQLSERVER >
+    type private Sql = SqlDataProvider< "Server=localhost;Database=SuaveMusicStore;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=SSPI;", DatabaseVendor=Common.DatabaseProviderTypes.MSSQLSERVER >
 
     type DbContext = Sql.dataContext
 

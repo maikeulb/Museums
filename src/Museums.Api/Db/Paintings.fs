@@ -1,7 +1,8 @@
 namespace Museums.Api.Db
 open FSharp.Data.Sql
 
-module PaintingsDb =
+
+module Paintings =
     type Paintings =
         {
             Id : int
