@@ -11,13 +11,15 @@ module Api =
 
         let museumWebPart = rest "museums" {
             GetAll = Db.getMuseums
-            GetById = Db.getMuseum
+            GetById = Db.getMuseumById
             Create = Db.createMuseum
             Update = Db.updateMuseum
-            UpdateById = Db.updateMuseum
+            UpdateById = Db.updateMuseumById
             Delete = Db.deleteMuseum
             IsExists = Db.isMuseumExists
         }
+
+        let app = museumsWebPart
 
         startWebServer defaultConfig app
 
