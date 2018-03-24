@@ -1,7 +1,7 @@
 namespace MuseumsApi
 
 module Api =
-        open Suave.Web
+    open Suave.Web
     open MuseumsApi.Rest
     open MuseumsApi.Db
     open Suave
@@ -9,6 +9,16 @@ module Api =
     [<EntryPoint>]
     let main argv =
 
-            startWebServer defaultConfig app
+        let museumWebPart = rest "museums" {
+            GetAll = Db.getMuseums
+            GetById = Db.getMuseum
+            Create = Db.createMuseum
+            Update = Db.updateMuseum
+            UpdateById = Db.updateMuseum
+            Delete = Db.deleteMuseum
+            IsExists = Db.isMuseumExists
+        }
+
+        startWebServer defaultConfig app
 
         0
