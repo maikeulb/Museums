@@ -1,4 +1,4 @@
-namespace Museums.Api.MuseumsDb
+namespace Museums.Api.Db
 
 open FSharp.Data.Sql
 
