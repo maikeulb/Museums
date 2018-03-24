@@ -1,4 +1,4 @@
-namespace MuseumsApi
+namespace Museums.Api
 
 module Api =
     open Suave.Web
