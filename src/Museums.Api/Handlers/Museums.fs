@@ -12,7 +12,6 @@ module Museums =
     open Suave.RequestErrors
     open Suave.Filters
 
-    // 'a -> WebPart
     let JSON v =
         let jsonSerializerSettings = new JsonSerializerSettings()
         jsonSerializerSettings.ContractResolver <- new CamelCasePropertyNamesContractResolver()
@@ -38,7 +37,7 @@ module Museums =
         Delete : int -> unit
     }
 
-    let rest resourceName resource =
+    let museumHandler resourceName resource =
 
         let resourcePath = "/" + resourceName
 
@@ -54,11 +53,12 @@ module Museums =
 
         let getResourceById =
             resource.GetById >> handleResource (NOT_FOUND "Resource not found")
-            let updateResourceById id =
-                request (getResourceFromReq >> (resource.UpdateById id) >> handleResource badRequest)
 
-                let deleteResourceById id =
-                    resource.Delete id
+        let updateResourceById id =
+            request (getResourceFromReq >> (resource.UpdateById id) >> handleResource badRequest)
+
+        let deleteResourceById id =
+            resource.Delete id
             NO_CONTENT
 
         let isResourceExists id =

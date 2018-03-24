@@ -9,7 +9,17 @@ module Api =
     [<EntryPoint>]
     let main argv =
 
-        let museumWebPart = rest "museums" {
+        let museumWebPart = museumHandler "museums" {
+            GetAll = Db.getMuseums
+            GetById = Db.getMuseumById
+            Create = Db.createMuseum
+            Update = Db.updateMuseum
+            UpdateById = Db.updateMuseumById
+            Delete = Db.deleteMuseum
+            IsExists = Db.isMuseumExists
+        }
+
+        let paintingWebPart = paintingHandler "paintings" {
             GetAll = Db.getMuseums
             GetById = Db.getMuseumById
             Create = Db.createMuseum

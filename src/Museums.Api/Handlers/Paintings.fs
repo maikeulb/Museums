@@ -12,7 +12,6 @@ module Paintings =
     open Suave.RequestErrors
     open Suave.Filters
 
-    // 'a -> WebPart
     let JSON v =
         let jsonSerializerSettings = new JsonSerializerSettings()
         jsonSerializerSettings.ContractResolver <- new CamelCasePropertyNamesContractResolver()
@@ -38,11 +37,11 @@ module Paintings =
         Delete : int -> unit
     }
 
-    let rest resourceName resource =
+    let paintingHandler resourceName resource =
 
-        let resourcePath = "/Museums" + resourceName
+        let resourcePath = new PrintfFormat<(int -> string),unit,string,string,int>("/museums" + "/%d" + resourceName)
 
-        let resourceIdPath = new PrintfFormat<(int -> string),unit,string,string,int>(resourcePath + "/%d")
+        let resourceIdPath = new PrintfFormat<(int -> int -> string),unit,string,string,(int * int)>("/museums" + "/%d" + resourceName + "/%d")
 
         let badRequest = BAD_REQUEST "Resource not found"
 
@@ -50,27 +49,29 @@ module Paintings =
             | Some r -> r |> JSON
             | _ -> requestError
 
-        let getAll= warbler (fun _ -> resource.GetAll () |> JSON)
+        let getAll (id _)=
+            resource.GetByAll id >> handleResource (NOT_FOUND "Resource not found")
 
-        let getResourceById =
+        let getResourceById (_ id)=
             resource.GetById >> handleResource (NOT_FOUND "Resource not found")
-            let updateResourceById id =
-                request (getResourceFromReq >> (resource.UpdateById id) >> handleResource badRequest)
 
-                let deleteResourceById id =
-                    resource.Delete id
+        let updateResourceById (_ id) =
+            request (getResourceFromReq >> (resource.UpdateById id) >> handleResource badRequest)
+
+        let deleteResourceById (_ id) =
+            resource.Delete id
             NO_CONTENT
 
-        let isResourceExists id =
+        let isResourceExists id (_ id)=
             if resource.IsExists id then OK "" else NOT_FOUND ""
 
         choose [
-            path resourcePath >=> choose [
+            path resourcePath  >=> choose [
                 GET >=> getAll
                 POST >=> request (getResourceFromReq >> resource.Create >> JSON)
                 PUT >=> request (getResourceFromReq >> resource.Update >> handleResource badRequest)
             ]
-            DELETE >=> pathScan resourceIdPath deleteResourceById
+            DELETE >=> pathScan resourceIdPath  deleteResourceById
             GET >=> pathScan resourceIdPath getResourceById
             PUT >=> pathScan resourceIdPath updateResourceById
             HEAD >=> pathScan resourceIdPath isResourceExists
