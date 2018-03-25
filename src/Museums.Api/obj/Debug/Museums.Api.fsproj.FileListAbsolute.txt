@@ -1,0 +1,5 @@
+/home/michael/Projects-Suave/Museums/src/Museums.Api/obj/Debug/Museums.Api.fsprojResolveAssemblyReference.cache
+/home/michael/Projects-Suave/Museums/src/Museums.Api/obj/Debug/Museums.Api.fsproj.CoreCompileInputs.cache
+/home/michael/Projects-Suave/Museums/src/Museums.Api/obj/Debug/RickAndMorty.Api.exe
+/home/michael/Projects-Suave/Museums/build/RickAndMorty.Api.exe
+/home/michael/Projects-Suave/Museums/build/RickAndMorty.Api.XML

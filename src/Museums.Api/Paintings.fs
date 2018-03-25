@@ -1,4 +1,4 @@
-namespace Museums.Api.Handlers
+namespace MuseumsApi.Handlers
 open Newtonsoft.Json
 open Newtonsoft.Json.Serialization
 open Suave
@@ -28,7 +28,6 @@ module Paintings =
         req.rawForm |> getString |> fromJson<'a>
 
     type RestResource<'a> = {
-        GetAll : unit -> 'a seq
         GetById : int -> 'a option
         IsExists : int -> bool
         Create : 'a -> 'a
@@ -39,9 +38,11 @@ module Paintings =
 
     let paintingHandler resourceName resource =
 
-        let resourcePath = new PrintfFormat<(int -> string),unit,string,string,int>("/museums" + "/%d" + resourceName)
+        let resourceBase = "/museums"
 
-        let resourceIdPath = new PrintfFormat<(int -> int -> string),unit,string,string,(int * int)>("/museums" + "/%d" + resourceName + "/%d")
+        let resourcePath = new PrintfFormat<(int -> string),unit,string,string,int>(resourceBase + "/%d/" + resourceName)
+
+        let resourceIdPath = new PrintfFormat<(int -> string),unit,string,string,(int * int)>(resourceBase + "/%d/" + resourceName + "/%d")
 
         let badRequest = BAD_REQUEST "Resource not found"
 
@@ -49,30 +50,26 @@ module Paintings =
             | Some r -> r |> JSON
             | _ -> requestError
 
-        let getAll (id _)=
-            resource.GetByAll id >> handleResource (NOT_FOUND "Resource not found")
+        (* let getAll id = *)
+        (*     resource.GetAll id >> handleResource (NOT_FOUND "Resource not found") *)
 
-        let getResourceById (_ id)=
-            resource.GetById >> handleResource (NOT_FOUND "Resource not found")
+        (* let getResourceById (_, id) = *)
+        (*     resource.GetById id >> handleResource (NOT_FOUND "Resource not found") *)
 
-        let updateResourceById (_ id) =
+        let updateResourceById (_, id) =
             request (getResourceFromReq >> (resource.UpdateById id) >> handleResource badRequest)
 
-        let deleteResourceById (_ id) =
+        let deleteResourceById urlparams =
+            let _, id = urlparams
             resource.Delete id
             NO_CONTENT
 
-        let isResourceExists id (_ id)=
+        let isResourceExists urlparams =
+            let _, id = urlparams
             if resource.IsExists id then OK "" else NOT_FOUND ""
 
         choose [
-            path resourcePath  >=> choose [
-                GET >=> getAll
-                POST >=> request (getResourceFromReq >> resource.Create >> JSON)
-                PUT >=> request (getResourceFromReq >> resource.Update >> handleResource badRequest)
-            ]
             DELETE >=> pathScan resourceIdPath  deleteResourceById
-            GET >=> pathScan resourceIdPath getResourceById
             PUT >=> pathScan resourceIdPath updateResourceById
             HEAD >=> pathScan resourceIdPath isResourceExists
         ]

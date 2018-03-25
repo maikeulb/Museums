@@ -1,17 +1,19 @@
-namespace Museums.Api.Db
+namespace MuseumsApi.Db
+open System
 open System.Collections.Generic
-
-
-type Museums = {
-    Id : int
-    Name : string
-}
 
 module MuseumsDb =
 
+    type Museum = {
+        Id : int
+        Name : string
+    }
+
     let museumsStorage = new Dictionary<int, Museum>()
+
     let getMuseums () =
         museumsStorage.Values :> seq<Museum>
+
     let getMuseum id =
         if museumsStorage.ContainsKey(id) then
             Some museumsStorage.[id]

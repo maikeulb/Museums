@@ -1,4 +1,4 @@
-namespace Museums.Api.Handlers
+namespace MuseumsApi.Handlers
 open Newtonsoft.Json
 open Newtonsoft.Json.Serialization
 open Suave

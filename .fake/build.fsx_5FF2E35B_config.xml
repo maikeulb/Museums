@@ -17,6 +17,7 @@
     <Assembly Location="/home/michael/.linuxbrew/brew/Cellar/mono/5.4.1.6/lib/mono/gac/Microsoft.Build.Framework/12.0.0.0__b03f5f7f11d50a3a/Microsoft.Build.Framework.dll" FullName="Microsoft.Build.Framework, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" Version="12.0.0.0" />
     <Assembly Location="/home/michael/.linuxbrew/brew/Cellar/mono/5.4.1.6/lib/mono/gac/System.Xml.Linq/4.0.0.0__b77a5c561934e089/System.Xml.Linq.dll" FullName="System.Xml.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" Version="4.0.0.0" />
     <Assembly Location="/home/michael/.linuxbrew/brew/Cellar/mono/5.4.1.6/lib/mono/gac/Mono.CompilerServices.SymbolWriter/4.0.0.0__0738eb9f132ed756/Mono.CompilerServices.SymbolWriter.dll" FullName="Mono.CompilerServices.SymbolWriter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" Version="4.0.0.0" />
+    <Assembly Location="/home/michael/.linuxbrew/brew/Cellar/mono/5.4.1.6/lib/mono/gac/Microsoft.Build.Framework/4.0.0.0__b03f5f7f11d50a3a/Microsoft.Build.Framework.dll" FullName="Microsoft.Build.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" Version="4.0.0.0" />
     <Assembly Location="/home/michael/Projects-Suave/Museums/packages/FAKE/tools/Mono.Cecil.dll" FullName="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" Version="0.9.6.0" />
   </Assemblies>
 </FAKECache>

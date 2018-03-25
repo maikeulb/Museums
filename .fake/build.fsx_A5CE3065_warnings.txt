@@ -1,1 +1,0 @@
-/home/michael/Projects-Suave/Museums/build.fsx(9,5): error FS0010: Unexpected infix operator in binding. Expected incomplete structured construct at or before this point or other token.

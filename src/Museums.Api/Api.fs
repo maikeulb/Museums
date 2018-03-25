@@ -1,8 +1,8 @@
-namespace Museums.Api
+namespace MuseumsApi
 
 module Api =
     open Suave.Web
-    open MuseumsApi.Rest
+    open MuseumsApi.Handlers
     open MuseumsApi.Db
     open Suave
 
@@ -10,26 +10,25 @@ module Api =
     let main argv =
 
         let museumWebPart = museumHandler "museums" {
-            GetAll = Db.getMuseums
-            GetById = Db.getMuseumById
-            Create = Db.createMuseum
-            Update = Db.updateMuseum
-            UpdateById = Db.updateMuseumById
-            Delete = Db.deleteMuseum
-            IsExists = Db.isMuseumExists
+            GetAll = MuseumsDb.getMuseums
+            GetById = MuseumsDb.getMuseum
+            Create = MuseumsDb.createMuseum
+            Update = MuseumsDb.updateMuseum
+            UpdateById = MuseumsDb.updateMuseumById
+            Delete = MuseumsDb.deleteMuseum
+            IsExists = MuseumsDb.isMuseumExists
         }
 
         let paintingWebPart = paintingHandler "paintings" {
-            GetAll = Db.getMuseums
-            GetById = Db.getMuseumById
-            Create = Db.createMuseum
-            Update = Db.updateMuseum
-            UpdateById = Db.updateMuseumById
-            Delete = Db.deleteMuseum
-            IsExists = Db.isMuseumExists
+            GetById = PaintingsDb.getPainting
+            Create = PaintingsDb.createPainting
+            Update = PaintingsDb.updatePainting
+            UpdateById = PaintingsDb.updatePaintingById
+            Delete = PaintingsDb.deletePainting
+            IsExists = PaintingsDb.isPaintingExists
         }
 
-        let app = museumsWebPart
+        let app = choose[museumWebPart; paintingWebPart]
 
         startWebServer defaultConfig app
 

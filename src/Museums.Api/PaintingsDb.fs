@@ -1,22 +1,25 @@
-namespace Museums.Api.Db
+namespace MuseumsApi.Db
+open System
 open System.Collections.Generic
-
-
-type Paintings = {
-    Id : int
-    Name : string
-}
 
 module PaintingsDb =
 
+    type Painting = {
+        Id : int
+        Name : string
+    }
+
     let paintingsStorage = new Dictionary<int, Painting>()
-    let getPaintings () =
+
+    let getPaintings id =
         paintingsStorage.Values :> seq<Painting>
+
     let getPainting id =
         if paintingsStorage.ContainsKey(id) then
             Some paintingsStorage.[id]
         else
             None
+
     let createPainting painting =
         let id = paintingsStorage.Values.Count + 1
         let newPainting = {painting with Id = id}
