@@ -28,7 +28,7 @@ module Paintings =
         req.rawForm |> getString |> fromJson<'a>
 
     type RestResource<'a> = {
-        GetById : int -> 'a option
+        GetById : (int*int) -> 'a option
         IsExists : int -> bool
         Create : 'a -> 'a
         Update : 'a -> 'a option
@@ -53,8 +53,8 @@ module Paintings =
         (* let getAll id = *)
         (*     resource.GetAll id >> handleResource (NOT_FOUND "Resource not found") *)
 
-        (* let getResourceById (_, id) = *)
-        (*     resource.GetById id >> handleResource (NOT_FOUND "Resource not found") *)
+        let getResourceById =
+            resource.GetById >> handleResource (NOT_FOUND "Resource not found")
 
         let updateResourceById (_, id) =
             request (getResourceFromReq >> (resource.UpdateById id) >> handleResource badRequest)
@@ -69,6 +69,7 @@ module Paintings =
             if resource.IsExists id then OK "" else NOT_FOUND ""
 
         choose [
+            GET >=> pathScan resourceIdPath getResourceById
             DELETE >=> pathScan resourceIdPath  deleteResourceById
             PUT >=> pathScan resourceIdPath updateResourceById
             HEAD >=> pathScan resourceIdPath isResourceExists

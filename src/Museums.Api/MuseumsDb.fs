@@ -19,6 +19,7 @@ module MuseumsDb =
             Some museumsStorage.[id]
         else
             None
+
     let createMuseum museum =
         let id = museumsStorage.Values.Count + 1
         let newMuseum = {museum with Id = id}

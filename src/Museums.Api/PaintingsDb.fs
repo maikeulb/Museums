@@ -14,7 +14,7 @@ module PaintingsDb =
     let getPaintings id =
         paintingsStorage.Values :> seq<Painting>
 
-    let getPainting id =
+    let getPainting (_, id) =
         if paintingsStorage.ContainsKey(id) then
             Some paintingsStorage.[id]
         else
