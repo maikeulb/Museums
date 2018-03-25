@@ -5,31 +5,31 @@ open Fake
 let buildDir  = "./build/"
 // Filesets
 let appReferences  =
-        !! "/**/*.csproj"
+    !! "/**/*.csproj"
     ++ "/**/*.fsproj"
 
-    // Targets
-    Target "Clean" (fun _ ->
-            CleanDirs [buildDir]
-    )
+// Targets
+Target "Clean" (fun _ ->
+    CleanDirs [buildDir]
+)
 
-    Target "Build" (fun _ ->
-            // compile all projects below src/app/
+Target "Build" (fun _ ->
+    // compile all projects below src/app/
     MSBuildDebug buildDir "Build" appReferences
     |> Log "AppBuild-Output: "
-    )
+)
 
-    Target "Run" (fun _ ->
-            ExecProcess
+Target "Run" (fun _ ->
+    ExecProcess
         (fun info -> info.FileName <- "./build/Museums.Api.exe")
         (System.TimeSpan.FromDays 1.)
     |> ignore
-        )
+)
 
-    // Build order
-    "Clean"
+// Build order
+"Clean"
   ==> "Build"
   ==> "Run"
 
-  // start build
-  RunTargetOrDefault "Build"
+// start build
+RunTargetOrDefault "Build"
