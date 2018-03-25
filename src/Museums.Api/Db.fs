@@ -43,28 +43,29 @@ module Museums =
     let isMuseumExists  = museumsStorage.ContainsKey
 
     let seed () =
-        createMuseum {Id=1; Name="fun"}
-        createMuseum {Id=2; Name="funnything"}
-        createMuseum {Id=3; Name="is that"}
-
+        createMuseum {Id=1; Name="Museum of Modern Art"} |> ignore
+        createMuseum {Id=2; Name="Whiteny Museum of American Art"} |> ignore
+        createMuseum {Id=3; Name="The Metropolitcan Museum of Art"} |> ignore
 
 
 module Paintings =
 
     type Painting = {
         Id : int
-        Name : string
+        Title : string
+        Artist : string
+        Medium : string
+        MuseumId : int
     }
 
     let paintingsStorage = new Dictionary<int, Painting>()
 
-    let getPaintings rid =
-        (* paintingsStorage.Values :> seq<Painting> *)
-        (* if paintingsStorage.ContainsKey(rid) then *)
-            let paintings =  paintingsStorage.Values :> seq<Painting>
+    let getPaintings museumId =
+        let paintings = paintingsStorage.Values |> Seq.filter (fun x-> x.MuseumId = museumId)
+        if Seq.isEmpty paintings then
+            None
+        else
             Some paintings
-        (* else *)
-            (* None *)
 
     let getPainting (_, id) =
         if paintingsStorage.ContainsKey(id) then
@@ -72,14 +73,14 @@ module Paintings =
         else
             None
 
-    let createPainting rid painting =
-        (* if paintingsStorage.ContainsKey(rid) then *)
+    let createPainting museumId painting =
+        if Museums.isMuseumExists museumId then
             let id = paintingsStorage.Values.Count + 1
             let newPainting = {painting with Id = id}
             paintingsStorage.Add(id, newPainting)
             Some newPainting
-        (* else *)
-            (* None *)
+        else
+            None
 
     let updatePaintingById paintingId paintingToBeUpdated =
         if paintingsStorage.ContainsKey(paintingId) then
@@ -98,6 +99,9 @@ module Paintings =
     let isPaintingExists = paintingsStorage.ContainsKey
 
     let seed () =
-        createPainting {Id=1; Name="lourve"}
-        createPainting {Id=2; Name="yeah"}
-        createPainting {Id=3; Name="is that"}
+        createPainting 1 {Id = 1; Title = "The Starry Night"; Artist="Vincent van Gogh"; Medium="Oil on canvas"; MuseumId=1} |> ignore
+        createPainting 1 {Id = 2; Title = "Les Demoiselles dAvignon"; Artist="Pablo Picasso"; Medium="Oil on canvas"; MuseumId=1} |> ignore
+        createPainting 2 {Id = 3; Title = "Bain a la Genouillere"; Artist="Claude Monet"; Medium="Oil on canvas"; MuseumId=2} |> ignore
+        createPainting 2 {Id = 4; Title = "Young Sailor II"; Artist="Henri Matisse"; Medium="Oil on canvas"; MuseumId=2} |> ignore
+        createPainting 3 {Id = 5; Title = "Early Sunday Morning"; Artist="Edward Hopper"; Medium="Oil on canvas"; MuseumId=3} |> ignore
+        createPainting 3 {Id = 6; Title = "Willem and Bicyle"; Artist="Willem de Kooning"; Medium="Oil on canvas"; MuseumId=3} |> ignore

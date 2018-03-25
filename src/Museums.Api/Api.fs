@@ -9,8 +9,8 @@ module Api =
     [<EntryPoint>]
     let main argv =
 
-        Museums.seed ()
-        Paintings.seed ()
+        Museums.seed () |> ignore
+        Paintings.seed () |> ignore
 
         let museumWebPart = rootHandler "museums" {
             GetAll = Museums.getMuseums
