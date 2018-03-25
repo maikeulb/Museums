@@ -1,15 +1,15 @@
-namespace Museums.Api.Db
+namespace MuseumsApi.Db
 open FSharp.Data.Sql
 
 
-module Museums =
-    type Museums =
-        {
-            Id : int
-            Name : string
-        }
+module MuseumsDb =
 
-    type private Sql = SqlDataProvider< "Server=localhost;Database=SuaveMusicStore;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=SSPI;", DatabaseVendor=Common.DatabaseProviderTypes.MSSQLSERVER >
+    type Museum =
+        {
+          Id : int
+          Name : string}
+
+    type private Sql = SqlDataProvider< "Server=localhost;Database=MuseumsDB;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=SSPI;", DatabaseVendor=Common.DatabaseProviderTypes.MSSQLSERVER >
 
     type DbContext = Sql.dataContext
 
@@ -21,17 +21,17 @@ module Museums =
 
     let mapToMuseum (museumEntity : MuseumEntity) =
         {
-            Id = albumEntity.Id
+            Id = museumEntity.Id
             Name = museumEntity.Name
         }
 
-        let getMuseums () =
-            getContext().``[dbo].[Museums]``
+    let getMuseums () =
+        getContext().``public.museums``
         |> Seq.map mapToMuseum
 
     let getMuseumEntityById (ctx : DbContext) id =
         query {
-            for museum in ctx.``[dbo].[Museums]`` do
+            for museum in ctx.``public.museums`` do
                 where (museum.Id = id)
                 select museum
         } |> firstOrNone
@@ -41,7 +41,7 @@ module Museums =
 
     let createMuseum museum =
         let ctx = getContext()
-        let museum = ctx.``[dbo].[Museums]``.Create(museum.Id, museum.Name)
+        let museum = ctx.``public.museums``.Create(museum.Id, museum.Name)
         ctx.SubmitUpdates()
         museum |> mapToMuseum
 
@@ -68,9 +68,10 @@ module Museums =
             a.Delete()
             ctx.SubmitUpdates()
 
-            let isMuseumExists id =
-                let ctx = getContext()
-                let museumEntity = getMuseumEntityById ctx id
+    let isMuseumExists id =
+        let ctx = getContext()
+        let museumEntity = getMuseumEntityById ctx id
+
         match museumEntity with
         | None -> false
         | Some _ -> true

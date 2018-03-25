@@ -4,4 +4,7 @@ nuget FAKE
 nuget FSharp.Core
 nuget Fsharp.Data
 nuget Newtonsoft.Json
+nuget Npgsql 3.1.10
+nuget SQL
+nuget SQLProvider
 nuget Suave

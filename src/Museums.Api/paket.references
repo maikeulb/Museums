@@ -1,3 +1,5 @@
+FSharp.Core
 Suave
 Newtonsoft.Json
-FSharp.Data
+SQLProvider
+Npgsql

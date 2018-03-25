@@ -8,7 +8,7 @@ open Suave.Successful
 
 
 [<AutoOpen>]
-module Museums =
+module Rest =
     open Suave.RequestErrors
     open Suave.Filters
 
@@ -27,7 +27,7 @@ module Museums =
         let getString rawForm = System.Text.Encoding.UTF8.GetString(rawForm)
         req.rawForm |> getString |> fromJson<'a>
 
-    type RestResource<'a> = {
+    type RootResource<'a> = {
         GetAll : unit -> 'a seq
         GetById : int -> 'a option
         IsExists : int -> bool
@@ -37,7 +37,7 @@ module Museums =
         Delete : int -> unit
     }
 
-    let museumHandler resourceName resource =
+    let rootHandler resourceName resource =
 
         let resourcePath = "/api/" + resourceName
 
@@ -72,6 +72,59 @@ module Museums =
             ]
             DELETE >=> pathScan resourceIdPath deleteResourceById
             GET >=> pathScan resourceIdPath getResourceById
+            PUT >=> pathScan resourceIdPath updateResourceById
+            HEAD >=> pathScan resourceIdPath isResourceExists
+        ]
+
+    type NestedResource<'a> = {
+        GetAll : int -> 'a seq option
+        GetById : (int*int) -> 'a option
+        IsExists : int -> bool
+        Create : int -> 'a -> 'a option
+        Update : 'a -> 'a option
+        UpdateById : int -> 'a -> 'a option
+        Delete : int -> unit
+    }
+
+    let nestedHandler resourceRoot resourceName resource =
+
+        (* let resourceBase = "/api/museums" *)
+        let resourceBase = "/api/" + resourceRoot
+
+        let resourcePath = new PrintfFormat<(int -> string),unit,string,string,int>(resourceBase + "/%d/" + resourceName)
+
+        let resourceIdPath = new PrintfFormat<(int -> string),unit,string,string,(int * int)>(resourceBase + "%d/" + resourceName + "/%d")
+
+        let badRequest = BAD_REQUEST "Resource not found"
+
+        let handleResource requestError = function
+            | Some r -> r |> JSON
+            | _ -> requestError
+
+        let getAll =
+            resource.GetAll >> handleResource (NOT_FOUND "Resource not found")
+
+        let createResource rid =
+            request (getResourceFromReq >> (resource.Create rid) >> handleResource badRequest)
+
+        let getResourceById =
+            resource.GetById >> handleResource (NOT_FOUND "Resource not found")
+
+        let updateResourceById (_, id) =
+            request (getResourceFromReq >> (resource.UpdateById id) >> handleResource badRequest)
+
+        let deleteResourceById (_, id) =
+            resource.Delete id
+            NO_CONTENT
+
+        let isResourceExists (_, id) =
+            if resource.IsExists id then OK "" else NOT_FOUND ""
+
+        choose [
+            GET >=> pathScan resourcePath getAll
+            POST >=> pathScan resourcePath createResource
+            GET >=> pathScan resourceIdPath getResourceById
+            DELETE >=> pathScan resourceIdPath deleteResourceById
             PUT >=> pathScan resourceIdPath updateResourceById
             HEAD >=> pathScan resourceIdPath isResourceExists
         ]

@@ -9,24 +9,24 @@ module Api =
     [<EntryPoint>]
     let main argv =
 
-        let museumWebPart = museumHandler "museums" {
-            GetAll = MuseumsDb.getMuseums
-            GetById = MuseumsDb.getMuseum
-            Create = MuseumsDb.createMuseum
-            Update = MuseumsDb.updateMuseum
-            UpdateById = MuseumsDb.updateMuseumById
-            Delete = MuseumsDb.deleteMuseum
-            IsExists = MuseumsDb.isMuseumExists
+        let museumWebPart = rootHandler "museums" {
+            GetAll = Museums.getMuseums
+            GetById = Museums.getMuseum
+            Create = Museums.createMuseum
+            Update = Museums.updateMuseum
+            UpdateById = Museums.updateMuseumById
+            Delete = Museums.deleteMuseum
+            IsExists = Museums.isMuseumExists
         }
 
-        let paintingWebPart = paintingHandler "paintings" {
-            GetAll = PaintingsDb.getPaintings
-            GetById = PaintingsDb.getPainting
-            Create = PaintingsDb.createPainting
-            Update = PaintingsDb.updatePainting
-            UpdateById = PaintingsDb.updatePaintingById
-            Delete = PaintingsDb.deletePainting
-            IsExists = PaintingsDb.isPaintingExists
+        let paintingWebPart = nestedHandler "museums" "paintings" {
+            GetAll = Paintings.getPaintings
+            GetById = Paintings.getPainting
+            Create = Paintings.createPainting
+            Update = Paintings.updatePainting
+            UpdateById = Paintings.updatePaintingById
+            Delete = Paintings.deletePainting
+            IsExists = Paintings.isPaintingExists
         }
 
         let app = choose[museumWebPart; paintingWebPart]

@@ -37,13 +37,14 @@ module Paintings =
         Delete : int -> unit
     }
 
-    let paintingHandler resourceName resource =
+    let nestedHandler resourceRoot resourceName resource =
 
-        let resourceBase = "/api/museums"
+        (* let resourceBase = "/api/museums" *)
+        let resourceBase = "/api/" + resourceRoot
 
         let resourcePath = new PrintfFormat<(int -> string),unit,string,string,int>(resourceBase + "/%d/" + resourceName)
 
-        let resourceIdPath = new PrintfFormat<(int -> string),unit,string,string,(int * int)>(resourceBase + "/%d/" + resourceName + "/%d")
+        let resourceIdPath = new PrintfFormat<(int -> string),unit,string,string,(int * int)>(resourceBase + "%d/" + resourceName + "/%d")
 
         let badRequest = BAD_REQUEST "Resource not found"
 
@@ -53,9 +54,6 @@ module Paintings =
 
         let getAll =
             resource.GetAll >> handleResource (NOT_FOUND "Resource not found")
-
-        (* let getAll = *)
-        (*     resource.GetAll |> JSON *)
 
         let createResource rid =
             request (getResourceFromReq >> (resource.Create rid) >> handleResource badRequest)
