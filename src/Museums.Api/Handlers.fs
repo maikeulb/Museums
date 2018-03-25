@@ -88,7 +88,6 @@ module Rest =
 
     let nestedHandler resourceRoot resourceName resource =
 
-        (* let resourceBase = "/api/museums" *)
         let resourceBase = "/api/" + resourceRoot
 
         let resourcePath = new PrintfFormat<(int -> string),unit,string,string,int>(resourceBase + "/%d/" + resourceName)

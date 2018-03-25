@@ -42,6 +42,13 @@ module Museums =
 
     let isMuseumExists  = museumsStorage.ContainsKey
 
+    let seed () =
+        createMuseum {Id=1; Name="fun"}
+        createMuseum {Id=2; Name="funnything"}
+        createMuseum {Id=3; Name="is that"}
+
+
+
 module Paintings =
 
     type Painting = {
@@ -89,3 +96,8 @@ module Paintings =
         paintingsStorage.Remove(paintingId) |> ignore
 
     let isPaintingExists = paintingsStorage.ContainsKey
+
+    let seed () =
+        createPainting {Id=1; Name="lourve"}
+        createPainting {Id=2; Name="yeah"}
+        createPainting {Id=3; Name="is that"}

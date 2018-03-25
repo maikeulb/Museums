@@ -9,6 +9,9 @@ module Api =
     [<EntryPoint>]
     let main argv =
 
+        Museums.seed ()
+        Paintings.seed ()
+
         let museumWebPart = rootHandler "museums" {
             GetAll = Museums.getMuseums
             GetById = Museums.getMuseum
