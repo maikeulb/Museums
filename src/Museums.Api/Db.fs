@@ -131,14 +131,6 @@ module Paintings =
                 select painting
         } |> Seq.toList
 
-    (* let getPaintings rid = *)
-    (*     (1* paintingsStorage.Values :> seq<Painting> *1) *)
-    (*     (1* if paintingsStorage.ContainsKey(rid) then *1) *)
-    (*         let paintings =  paintingsStorage.Values :> seq<Painting> *)
-    (*         Some paintings *)
-    (*     (1* else *1) *)
-    (*         (1* None *1) *)
-
     let getPaintingEntityById (ctx : DbContext) id =
         query {
             for painting in ctx.Public.Paintings do
@@ -151,17 +143,22 @@ module Paintings =
 
     let getPaintingsByMuseumId museumId =
         let paintings =  getPaintingEntitiesByMuseumId (getContext()) museumId |> List.map mapToPainting
-        Some paintings
+        if List.isEmpty paintings then
+            None
+        else
+            Some paintings
 
     let createPainting museumId painting =
         let ctx = getContext()
-        let paintingEntity = ctx.Public.Paintings.Create()
-        paintingEntity.Name <- painting.Name
-        paintingEntity.MuseumId <- museumId
-        ctx.SubmitUpdates()
-        let paintings = paintingEntity |> mapToPainting
-        Some paintings
-
+        if Museums.isMuseumExists museumId then
+            let paintingEntity = ctx.Public.Paintings.Create()
+            paintingEntity.Name <- painting.Name
+            paintingEntity.MuseumId <- museumId
+            ctx.SubmitUpdates()
+            let painting = paintingEntity |> mapToPainting
+            Some painting
+        else
+            None
 
     let updatePaintingById id painting =
         let ctx = getContext()
