@@ -20,6 +20,7 @@ module Api =
         }
 
         let paintingWebPart = paintingHandler "paintings" {
+            GetAll = PaintingsDb.getPaintings
             GetById = PaintingsDb.getPainting
             Create = PaintingsDb.createPainting
             Update = PaintingsDb.updatePainting

@@ -39,7 +39,7 @@ module Museums =
 
     let museumHandler resourceName resource =
 
-        let resourcePath = "/" + resourceName
+        let resourcePath = "/api/" + resourceName
 
         let resourceIdPath = new PrintfFormat<(int -> string),unit,string,string,int>(resourcePath + "/%d")
 

@@ -12,8 +12,13 @@ module PaintingsDb =
 
     let paintingsStorage = new Dictionary<int, Painting>()
 
-    let getPaintings id =
-        paintingsStorage.Values :> seq<Painting>
+    let getPaintings rid =
+        (* paintingsStorage.Values :> seq<Painting> *)
+        if paintingsStorage.ContainsKey(rid) then
+            let paintings =  paintingsStorage.Values :> seq<Painting>
+            Some paintings
+        else
+            None
 
     let getPainting (_, id) =
         if paintingsStorage.ContainsKey(id) then

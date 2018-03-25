@@ -28,9 +28,9 @@ module Paintings =
         req.rawForm |> getString |> fromJson<'a>
 
     type RestResource<'a> = {
+        GetAll : int -> 'a seq option
         GetById : (int*int) -> 'a option
         IsExists : int -> bool
-        (* Create : 'a -> 'a option *)
         Create : int -> 'a -> 'a option
         Update : 'a -> 'a option
         UpdateById : int -> 'a -> 'a option
@@ -39,7 +39,7 @@ module Paintings =
 
     let paintingHandler resourceName resource =
 
-        let resourceBase = "/museums"
+        let resourceBase = "/api/museums"
 
         let resourcePath = new PrintfFormat<(int -> string),unit,string,string,int>(resourceBase + "/%d/" + resourceName)
 
@@ -51,8 +51,11 @@ module Paintings =
             | Some r -> r |> JSON
             | _ -> requestError
 
-        (* let getAll id = *)
-        (*     resource.GetAll id >> handleResource (NOT_FOUND "Resource not found") *)
+        let getAll =
+            resource.GetAll >> handleResource (NOT_FOUND "Resource not found")
+
+        (* let getAll = *)
+        (*     resource.GetAll |> JSON *)
 
         let createResource rid =
             request (getResourceFromReq >> (resource.Create rid) >> handleResource badRequest)
@@ -63,16 +66,15 @@ module Paintings =
         let updateResourceById (_, id) =
             request (getResourceFromReq >> (resource.UpdateById id) >> handleResource badRequest)
 
-        let deleteResourceById urlparams =
-            let _, id = urlparams
+        let deleteResourceById (_, id) =
             resource.Delete id
             NO_CONTENT
 
-        let isResourceExists urlparams =
-            let _, id = urlparams
+        let isResourceExists (_, id) =
             if resource.IsExists id then OK "" else NOT_FOUND ""
 
         choose [
+            GET >=> pathScan resourcePath getAll
             POST >=> pathScan resourcePath createResource
             GET >=> pathScan resourceIdPath getResourceById
             DELETE >=> pathScan resourceIdPath deleteResourceById
