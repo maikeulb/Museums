@@ -33,13 +33,6 @@ module Museums =
         getContext().Public.Museums
         |> Seq.map mapToMuseum
 
-    let getMuseumEntitiesByName (ctx : DbContext) name =
-        query {
-            for museum in ctx.Public.Museums do
-                where (museum.Name = name)
-                select museum
-        } |> Seq.toList
-
     let getMuseumEntityById (ctx : DbContext) id =
         query {
             for museum in ctx.Public.Museums do
@@ -49,9 +42,6 @@ module Museums =
 
     let getMuseum id =
         getMuseumEntityById (getContext()) id |> Option.map mapToMuseum
-
-    let getMuseumsByName name =
-        getMuseumEntitiesByName (getContext()) name |> List.map mapToMuseum
 
     let createMuseum museum =
         let ctx = getContext()
@@ -65,9 +55,9 @@ module Museums =
         let museumEntity = getMuseumEntityById ctx museum.Id
         match museumEntity with
         | None -> None
-        | Some a ->
-            a.Id <- museum.Id
-            a.Name <- museum.Name
+        | Some m ->
+            m.Id <- museum.Id
+            m.Name <- museum.Name
             ctx.SubmitUpdates()
             Some museum
 
@@ -96,7 +86,9 @@ module Paintings =
     type Painting = {
         Id : int
         MuseumId : int
-        Name : string
+        Title : string
+        Artist : string
+        Medium : string
     }
 
     type Sql =
@@ -117,7 +109,9 @@ module Paintings =
         {
             Id = paintingEntity.Id
             MuseumId = paintingEntity.MuseumId
-            Name = paintingEntity.Name
+            Title = paintingEntity.Title
+            Artist = paintingEntity.Artist
+            Medium = paintingEntity.Medium
         }
 
     let getPaintings () =
@@ -152,7 +146,9 @@ module Paintings =
         let ctx = getContext()
         if Museums.isMuseumExists museumId then
             let paintingEntity = ctx.Public.Paintings.Create()
-            paintingEntity.Name <- painting.Name
+            paintingEntity.Title <- painting.Title
+            paintingEntity.Artist <- painting.Artist
+            paintingEntity.Medium <- painting.Medium
             paintingEntity.MuseumId <- museumId
             ctx.SubmitUpdates()
             let painting = paintingEntity |> mapToPainting
@@ -165,9 +161,12 @@ module Paintings =
         let paintingEntity = getPaintingEntityById ctx painting.Id
         match paintingEntity with
         | None -> None
-        | Some a ->
-            a.Id <- painting.Id
-            a.Name <- painting.Name
+        | Some p ->
+            p.Id <- painting.Id
+            p.MuseumId <- painting.MuseumId
+            p.Title <- painting.Title
+            p.Artist <- painting.Artist
+            p.Medium <- painting.Medium
             ctx.SubmitUpdates()
             Some painting
 
