@@ -6,6 +6,7 @@ module PaintingsDb =
 
     type Painting = {
         Id : int
+        MuseumId : int
         Name : string
     }
 
@@ -20,11 +21,14 @@ module PaintingsDb =
         else
             None
 
-    let createPainting painting =
-        let id = paintingsStorage.Values.Count + 1
-        let newPainting = {painting with Id = id}
-        paintingsStorage.Add(id, newPainting)
-        newPainting
+    let createPainting rid painting =
+        if paintingsStorage.ContainsKey(rid) then
+            let id = paintingsStorage.Values.Count + 1
+            let newPainting = {painting with Id = id}
+            paintingsStorage.Add(id, newPainting)
+            Some newPainting
+        else
+            None
 
     let updatePaintingById paintingId paintingToBeUpdated =
         if paintingsStorage.ContainsKey(paintingId) then
@@ -41,4 +45,3 @@ module PaintingsDb =
         paintingsStorage.Remove(paintingId) |> ignore
 
     let isPaintingExists = paintingsStorage.ContainsKey
-

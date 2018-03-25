@@ -30,7 +30,8 @@ module Paintings =
     type RestResource<'a> = {
         GetById : (int*int) -> 'a option
         IsExists : int -> bool
-        Create : 'a -> 'a
+        (* Create : 'a -> 'a option *)
+        Create : int -> 'a -> 'a option
         Update : 'a -> 'a option
         UpdateById : int -> 'a -> 'a option
         Delete : int -> unit
@@ -53,6 +54,9 @@ module Paintings =
         (* let getAll id = *)
         (*     resource.GetAll id >> handleResource (NOT_FOUND "Resource not found") *)
 
+        let createResource rid =
+            request (getResourceFromReq >> (resource.Create rid) >> handleResource badRequest)
+
         let getResourceById =
             resource.GetById >> handleResource (NOT_FOUND "Resource not found")
 
@@ -69,8 +73,9 @@ module Paintings =
             if resource.IsExists id then OK "" else NOT_FOUND ""
 
         choose [
+            POST >=> pathScan resourcePath createResource
             GET >=> pathScan resourceIdPath getResourceById
-            DELETE >=> pathScan resourceIdPath  deleteResourceById
+            DELETE >=> pathScan resourceIdPath deleteResourceById
             PUT >=> pathScan resourceIdPath updateResourceById
             HEAD >=> pathScan resourceIdPath isResourceExists
         ]
