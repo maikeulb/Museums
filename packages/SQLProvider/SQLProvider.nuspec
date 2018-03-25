@@ -1,36 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
-  <metadata minClientVersion="2.12">
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
     <id>SQLProvider</id>
-    <version>1.1.38</version>
-    <authors>Ross McKinlay, Colin Bull, Tuomas Hietanen</authors>
-    <owners>Ross McKinlay, Colin Bull, Tuomas Hietanen</owners>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <version>1.1.7</version>
+    <authors>Ross McKinlay, Colin Bull</authors>
+    <owners>Ross McKinlay, Colin Bull</owners>
     <licenseUrl>http://github.com/fsprojects/SQLProvider/blob/master/LICENSE.md</licenseUrl>
     <projectUrl>http://fsprojects.github.io/SQLProvider</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Type providers for SQL database access.</description>
     <summary>Type providers for SQL database access.</summary>
-    <releaseNotes>Group-by key canonical operation support
-Crossjoin support for recent LINQ-trees
-Reference component updates</releaseNotes>
-    <copyright>Copyright 2015-2017</copyright>
+    <releaseNotes>Canonical operation AddMinutes supports now other sql-columns as parameter.</releaseNotes>
+    <copyright>Copyright 2015</copyright>
     <tags>F#, fsharp, typeprovider, sql, sqlserver</tags>
-    <dependencies>
-      <group targetFramework=".NETFramework4.5.1" />
-      <group targetFramework=".NETStandard2.0">
-        <dependency id="NETStandard.Library" version="2.0.0" />
-        <dependency id="FSharp.Core" version="3.1.2.5" />
-        <dependency id="System.Runtime" version="4.3.0" />
-        <dependency id="System.Runtime.Loader" version="4.3.0" />
-        <dependency id="System.Runtime.Serialization.Primitives" version="4.3.0" />
-        <dependency id="System.Runtime.Serialization.Formatters" version="4.3.0" />
-        <dependency id="System.IO" version="4.3.0" />
-        <dependency id="System.Console" version="4.3.0" />
-        <dependency id="System.Reflection" version="4.3.0" />
-        <dependency id="System.Reflection.TypeExtensions" version="4.3.0" />
-        <dependency id="System.Data.SqlClient" version="4.4.0" />
-        <dependency id="System.Data.Common" version="4.3.0" />
-      </group>
-    </dependencies>
   </metadata>
 </package>

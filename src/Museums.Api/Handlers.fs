@@ -77,7 +77,7 @@ module Rest =
         ]
 
     type NestedResource<'a> = {
-        GetAll : int -> 'a seq option
+        GetAll : int -> 'a list option
         GetById : (int*int) -> 'a option
         IsExists : int -> bool
         Create : int -> 'a -> 'a option

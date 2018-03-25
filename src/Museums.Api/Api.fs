@@ -9,9 +9,6 @@ module Api =
     [<EntryPoint>]
     let main argv =
 
-        Museums.seed ()
-        Paintings.seed ()
-
         let museumWebPart = rootHandler "museums" {
             GetAll = Museums.getMuseums
             GetById = Museums.getMuseum
@@ -23,7 +20,7 @@ module Api =
         }
 
         let paintingWebPart = nestedHandler "museums" "paintings" {
-            GetAll = Paintings.getPaintings
+            GetAll = Paintings.getPaintingsByMuseumId
             GetById = Paintings.getPainting
             Create = Paintings.createPainting
             Update = Paintings.updatePainting

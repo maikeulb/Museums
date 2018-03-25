@@ -106,7 +106,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.1'">
       <ItemGroup>
         <Reference Include="FSharp.Data.SqlProvider">
-          <HintPath>..\..\packages\SQLProvider\lib\net451\FSharp.Data.SqlProvider.dll</HintPath>
+          <HintPath>..\..\packages\SQLProvider\lib\FSharp.Data.SqlProvider.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

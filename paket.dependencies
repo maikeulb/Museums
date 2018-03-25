@@ -6,5 +6,5 @@ nuget Fsharp.Data
 nuget Newtonsoft.Json
 nuget Npgsql 3.1.10
 nuget SQL
-nuget SQLProvider
+nuget SQLProvider 1.1.7
 nuget Suave
