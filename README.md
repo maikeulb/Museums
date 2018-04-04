@@ -6,6 +6,7 @@ Technology
 ----------
 * Suave
 * PostgreSQL (using SQLProvider)
+* Flyway
 
 Endpoints
 ---------
@@ -76,4 +77,3 @@ Go to http://localhost:8080 and visit one of the above endpoints
 TODO
 ----
 Dockerfile  
-Remove superfluous museumId from nested paintings collection
