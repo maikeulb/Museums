@@ -1,7 +1,0 @@
-/home/michael/Projects-Suave/Museums/src/Museums.Api/obj/Debug/Museums.Api.fsprojResolveAssemblyReference.cache
-/home/michael/Projects-Suave/Museums/src/Museums.Api/obj/Debug/Museums.Api.fsproj.CoreCompileInputs.cache
-/home/michael/Projects-Suave/Museums/build/Museums.Api.exe
-/home/michael/Projects-Suave/Museums/build/Museums.Api.XML
-/home/michael/Projects-Suave/Museums/src/Museums.Api/obj/Debug/Museums.Api.exe
-/home/michael/Projects-Suave/Museums/src/Museums.Api/obj/Debug/Museums.Api.exe.config
-/home/michael/Projects-Suave/Museums/build/Museums.Api.exe.config

@@ -63,9 +63,9 @@ Run
 
 You need Mono, forge, and fake to run the API. There are two branches: the
 `master` branch is the in-memory solution (which is buggy), and the `postgres`
-branch is the persistent solution. To run the `postgres` branch:
-create the database and apply the migrations (scripts located in the migrations
-folder).
+branch is the persistent solution. To run the `postgres` branch: create
+a database, open `db.fs` and point the URI to your database, and apply the
+migrations (scripts located in the migrations folder).
 
 ```
 git checkout postgres
